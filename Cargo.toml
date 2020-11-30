@@ -1,5 +1,6 @@
 [package]
 name = "simple-cache-rs"
+description = "A simple rust implementation of HashMap with expiration control."
 version = "0.1.0"
 authors = ["Calvin Brown <cab025@protonmail.com>"]
 edition = "2018"
