@@ -1,7 +1,7 @@
 # simple-cache-rs
 A simple im-mem cache for Rust
 
-[![Docs](https://docs.rs/simple-cache-rs/badge.svg)]
+![Docs](https://docs.rs/simple-cache-rs/badge.svg)
 [![Apache-2 licensed](https://img.shields.io/crates/l/simple-cache-rs.svg)](./LICENSE)
 [![CI](https://github.com/calvinbrown085/simple-cache-rs/workflows/Rust/badge.svg)](https://github.com/calvinbrown085/simple-cache-rs/actions?query=workflow%3ARust)
 
