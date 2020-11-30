@@ -18,6 +18,15 @@ pub struct SimpleCache<K, V> {
 }
 
 impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
+
+    /// Returns a new instance of SimpleCache
+    ///
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// ```
     pub fn new() -> SimpleCache<K, V> {
         SimpleCache {
             h: HashMap::new(),
@@ -26,6 +35,15 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     }
 
 
+    /// Returns a new instance of SimpleCache with a timeout for values
+    ///
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    /// use std::time::Duration;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::with_timeout(Duration::new(100, 0));
+    ///
+    /// ```
     pub fn with_timeout(timeout: Duration) -> SimpleCache<K, V> {
         SimpleCache {
             h: HashMap::new(),
@@ -33,6 +51,9 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
         }
     }
 
+
+    /// Get a value optionally from the cache, if the value is expired this method will return None
+    /// and delete the value lazily from the cache.
     pub fn get(&mut self, key: &K) -> Option<V> {
         self.h.get(key).and_then(|v| {
             match v.timeout {
