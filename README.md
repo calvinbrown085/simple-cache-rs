@@ -5,15 +5,13 @@ A simple im-mem cache for Rust
 [![Apache-2 licensed](https://img.shields.io/crates/l/simple-cache-rs.svg)](./LICENSE)
 [![CI](https://github.com/calvinbrown085/simple-cache-rs/workflows/Rust/badge.svg)](https://github.com/calvinbrown085/simple-cache-rs/actions?query=workflow%3ARust)
 
-A Rust implementation of the 2 letter state abbreviations for the USA.
-
+A simple rust implementation of HashMap with expiration control.
 ## Example
 ```
-use us_state_info_rs::StateAbbr;
+use simple_cache_rs::SimpleCache;
 
-let iowa_state_abbr = StateAbbr::IA;
-format!("{}", iowa_state_abbr);
+let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+
+cache.get(&1);
 ```
 
-
-CAUTION: This application is still in _heavy_ development. Please use at your own risk.
