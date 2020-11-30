@@ -54,6 +54,13 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
 
     /// Get a value optionally from the cache, if the value is expired this method will return None
     /// and delete the value lazily from the cache.
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// cache.get(&1);
+    /// ```
     pub fn get(&mut self, key: &K) -> Option<V> {
         self.h.get(key).and_then(|v| {
             match v.timeout {
@@ -70,14 +77,40 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
         })
     }
 
+    /// Get all keys that are in the cache
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// cache.keys();
+    /// ```
     pub fn keys(&self) -> Vec<K> {
         self.h.keys().map(|k| k.clone()).collect::<Vec<K>>()
     }
 
+    /// Get all values that are in the cache
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// cache.values();
+    /// ```
     pub fn values(&self) -> Vec<V> {
         self.h.values().map(|vwt| vwt.value.clone()).collect::<Vec<V>>()
     }
 
+
+    /// Insert a batch of items into the cache
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// let items = vec!((1, String::from("a")), (2, String::from("b")));
+    /// cache.insert_batch(items);
+    /// ```
     pub fn insert_batch(&mut self, items: Vec<(K, V)>) {
         for item in items {
             self.h.insert(
@@ -91,6 +124,14 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
         }
     }
 
+    /// Insert an item into the cache
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// cache.insert(1, String::from("a"));
+    /// ```
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
         self.h.insert(
             key,
@@ -102,6 +143,15 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
         ).map(|vwt| vwt.value.clone())
     }
 
+    /// Remove an entry from the cache
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    ///
+    /// cache.insert(1, String::from("a"));
+    /// cache.delete(&1);
+    /// ```
     pub fn delete(&mut self, key: &K) -> Option<V> {
         self.h.remove(key).map(|vwt| vwt.value)
     }
