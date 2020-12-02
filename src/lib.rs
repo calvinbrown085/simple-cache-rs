@@ -22,30 +22,20 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
-    ///
+  /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     /// ```
-    pub fn new() -> SimpleCache<K, V> {
-        SimpleCache {
-            h: HashMap::new(),
-            timeout: None,
-        }
-    }
-
-
-    /// Returns a new instance of SimpleCache with a timeout for values
-    ///
+  /// OR
     /// ```
     /// use simple_cache_rs::SimpleCache;
     /// use std::time::Duration;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::with_timeout(Duration::new(100, 0));
-    ///
+  /// let timeout = Duration::new(5, 0);
+  /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(Some(timeout));
     /// ```
-    pub fn with_timeout(timeout: Duration) -> SimpleCache<K, V> {
+  pub fn new(timeout: Option<Duration>) -> SimpleCache<K, V> {
         SimpleCache {
-            h: HashMap::new(),
-            timeout: Some(timeout),
+      h: Box::new(HashMap::new()),
+      timeout: timeout
         }
     }
 
