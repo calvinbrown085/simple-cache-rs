@@ -61,19 +61,15 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     ///
     /// cache.get(&1);
     /// ```
-    pub fn get(&mut self, key: &K) -> Option<V> {
+    pub fn get(&self, key: &K) -> Option<V> {
         self.h.get(key).and_then(|v| {
-            match v.timeout {
-                Some(timeout) => {
-                    if v.insert_time.elapsed() >= timeout {
-                        self.clone().delete(key);
-                        None
-                    } else {
-                        Some(v.value.clone())
-                    }
-                },
-                None => Some(v.value.clone())
+            if let Some(timeout) = v.timeout {
+                if v.insert_time.elapsed() >= timeout {
+                    self.clone().delete(key);
+                    return None
+                }
             }
+            Some(v.value.clone())
         })
     }
 
