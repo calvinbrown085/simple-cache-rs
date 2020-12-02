@@ -2,9 +2,9 @@
 name = "simple-cache-rs"
 description = "A simple rust implementation of HashMap with expiration control."
 version = "0.1.0"
-authors = ["Calvin Brown <cab025@protonmail.com>"]
+authors = ["Giuseppe Eletto <peppe.eletto@gmail.com>", "Calvin Brown <cab025@protonmail.com>"]
 edition = "2018"
-repository = "https://github.com/calvinbrown085/simple-cache-rs"
+repository = "https://github.com/giuseppe998e/simple-cache-rs"
 license = "Apache-2.0"
 keywords = ["cache", "mem-cache"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
