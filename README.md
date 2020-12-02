@@ -25,11 +25,9 @@ use std::thread; // For example purposes only
 let timeout = Duration::new(1, 0);
 let mut scache: SimpleCache<i32, String> = SimpleCache::new(Some(timeout));
 
-let str_test = String::from("test");
-
-scache.insert(1, str_test);
-assert_eq!(Some(str_test), scache.get(&1));
+scache.insert(1, String::from("test"));
+assert_eq!(Some(String::from("test")), scache.get(&1));
 
 thread::sleep(Duration::new(1, 1)); // For example purposes only
-assert_ne!(Some(str_test), scache.get(&1));
+assert_ne!(Some(String::from("test")), scache.get(&1));
 ```
