@@ -7,7 +7,7 @@ A simple im-mem cache for Rust
 
 A simple rust implementation of HashMap with expiration control.
 ## Example
-```
+```rust
 use simple_cache_rs::SimpleCache;
 
 let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
