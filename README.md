@@ -10,8 +10,8 @@ A simple rust implementation of HashMap with expiration control.
 ```
 use simple_cache_rs::SimpleCache;
 
-let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
 
-cache.get(&1);
+cache.insert(1, String::from("test"));
+println!("{:?}", cache.get(&1));
 ```
-
