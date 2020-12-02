@@ -22,40 +22,30 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
-    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     /// ```
-    pub fn new() -> SimpleCache<K, V> {
-        SimpleCache {
-            h: Box::new(HashMap::new()),
-            timeout: None
-        }
-    }
-
-
-    /// Returns a new instance of SimpleCache with a timeout for values
-    ///
+    /// OR
     /// ```
     /// use simple_cache_rs::SimpleCache;
     /// use std::time::Duration;
-    ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::with_timeout(Duration::new(100, 0));
+    /// 
+    /// let timeout = Duration::new(100, 0);
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(Some(timeout));
     ///
     /// ```
-    pub fn with_timeout(timeout: Duration) -> SimpleCache<K, V> {
+    pub fn new(timeout: Option<Duration>) -> SimpleCache<K, V> {
         SimpleCache {
             h: Box::new(HashMap::new()),
-            timeout: Some(timeout)
+            timeout: timeout
         }
     }
-
 
     /// Get a value optionally from the cache, if the value is expired this method will return None
     /// and delete the value lazily from the cache.
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.get(&1);
     /// ```
@@ -75,7 +65,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.keys();
     /// ```
@@ -87,7 +77,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.values();
     /// ```
@@ -100,7 +90,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// let items = vec!((1, String::from("a")), (2, String::from("b")));
     /// cache.insert_batch(items);
@@ -121,7 +111,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.insert(1, String::from("a"));
     /// ```
@@ -140,7 +130,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.insert(1, String::from("a"));
     /// cache.delete(&1);
@@ -151,6 +141,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     }
 }
 
+
 #[cfg(test)]
 mod tests {
     use crate::SimpleCache;
@@ -159,7 +150,7 @@ mod tests {
 
     #[test]
     fn insert_and_get_item() {
-        let mut scache: SimpleCache<i32, String> = SimpleCache::new();
+        let mut scache: SimpleCache<i32, String> = SimpleCache::new(None);
         scache.insert(1, String::from("hello"));
 
         let v = scache.get(&1);
@@ -169,7 +160,7 @@ mod tests {
 
     #[test]
     fn insert_and_get_item_and_remove() {
-        let mut scache: SimpleCache<i32, String> = SimpleCache::new();
+        let mut scache: SimpleCache<i32, String> = SimpleCache::new(None);
         scache.insert(1, String::from("hello"));
 
         let v = scache.get(&1);
@@ -185,7 +176,7 @@ mod tests {
 
     #[test]
     fn insert_batch_test() {
-        let mut scache: SimpleCache<i32, String> = SimpleCache::new();
+        let mut scache: SimpleCache<i32, String> = SimpleCache::new(None);
 
         scache.insert_batch(vec![(1, String::from("hello")), (2, String::from("world"))]);
 
@@ -197,7 +188,7 @@ mod tests {
 
     #[test]
     fn get_keys_test() {
-        let mut scache: SimpleCache<i32, String> = SimpleCache::new();
+        let mut scache: SimpleCache<i32, String> = SimpleCache::new(None);
         scache.insert(1, String::from("hello"));
 
         let keys = scache.keys();
@@ -207,7 +198,7 @@ mod tests {
 
     #[test]
     fn get_values_test() {
-        let mut scache: SimpleCache<i32, String> = SimpleCache::new();
+        let mut scache: SimpleCache<i32, String> = SimpleCache::new(None);
         scache.insert(1, String::from("hello"));
 
         let values = scache.values();
@@ -215,10 +206,10 @@ mod tests {
         assert_eq!(values, vec!("hello"))
     }
 
-
     #[test]
     fn insert_with_timeout() {
-        let mut scache: SimpleCache<i32, String> = SimpleCache::with_timeout(Duration::new(1, 0));
+        let timeout = Duration::new(1, 0);
+        let mut scache: SimpleCache<i32, String> = SimpleCache::new(Some(timeout));
 
         scache.insert(1, String::from("hello"));
         thread::sleep(Duration::new(1, 1));
