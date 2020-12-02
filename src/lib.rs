@@ -132,13 +132,14 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+  /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.insert(1, String::from("a"));
     /// cache.delete(&1);
     /// ```
     pub fn delete(&mut self, key: &K) -> Option<V> {
-        self.h.remove(key).map(|vwt| vwt.value)
+    let entry = self.h.remove(key)?;
+    Some(entry.value)
     }
 }
 
