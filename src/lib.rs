@@ -13,7 +13,7 @@ struct ValueWithTimeout<V> {
 
 #[derive(Debug, Clone)]
 pub struct SimpleCache<K, V> {
-    h: HashMap<K, ValueWithTimeout<V>>,
+    h: Box<HashMap<K, ValueWithTimeout<V>>>,
     timeout: Option<Duration>,
 }
 
@@ -29,7 +29,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     /// ```
     pub fn new() -> SimpleCache<K, V> {
         SimpleCache {
-            h: HashMap::new(),
+            h: Box::new(HashMap::new()),
             timeout: None,
         }
     }
@@ -46,7 +46,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     /// ```
     pub fn with_timeout(timeout: Duration) -> SimpleCache<K, V> {
         SimpleCache {
-            h: HashMap::new(),
+            h: Box::new(HashMap::new()),
             timeout: Some(timeout),
         }
     }
