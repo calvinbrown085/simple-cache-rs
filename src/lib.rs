@@ -4,11 +4,9 @@ use std::time::Duration;
 use std::time::Instant;
 
 #[derive(Debug, Clone)]
-struct ValueWithTimeout<V> {
+struct Entry<V> {
     value: V,
-    insert_time: Instant,
-    timeout: Option<Duration>,
-
+  insert_time: Instant
 }
 
 #[derive(Debug, Clone)]
