@@ -11,7 +11,7 @@ struct Entry<V> {
 
 #[derive(Debug, Clone)]
 pub struct SimpleCache<K, V> {
-  h: Box<HashMap<K, Entry<V>>>,
+  hashmap: Box<HashMap<K, Entry<V>>>,
   timeout: Option<Duration>
 }
 
@@ -34,7 +34,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// ```
   pub fn new(timeout: Option<Duration>) -> SimpleCache<K, V> {
     SimpleCache {
-      h: Box::new(HashMap::new()),
+      hashmap: Box::new(HashMap::new()),
       timeout: timeout
     }
   }
@@ -49,7 +49,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// cache.get(&1);
   /// ```
   pub fn get(&mut self, key: &K) -> Option<V> {
-    let entry = self.h.get(key)?;
+    let entry = self.hashmap.get(key)?;
 
     if let Some(timeout) = self.timeout {
       if entry.insert_time.elapsed() >= timeout {
@@ -70,9 +70,9 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// cache.keys();
   /// ```
   pub fn keys(&self) -> Vec<K> {
-    self.h.keys()
-          .map(|k| k.clone())
-          .collect::<Vec<K>>()
+    self.hashmap.keys()
+                .map(|k| k.clone())
+                .collect::<Vec<K>>()
   }
 
   /// Get all values that are in the cache
@@ -84,11 +84,10 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// cache.values();
   /// ```
   pub fn values(&self) -> Vec<V> {
-    self.h.values()
-          .map(|v| v.value.clone())
-          .collect::<Vec<V>>()
+    self.hashmap.values()
+                .map(|v| v.value.clone())
+                .collect::<Vec<V>>()
   }
-
 
   /// Insert a batch of items into the cache
   /// ```
@@ -103,13 +102,12 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     let i_now = Instant::now();
 
     for item in items {
-      self.h.insert(
-              item.0,
-              Entry {
-                value: item.1,
-                insert_time: i_now
-              }
-            );
+      self.hashmap.insert(
+                    item.0,
+                    Entry {
+                      value: item.1,
+                      insert_time: i_now
+                  });
     }
   }
 
@@ -122,13 +120,12 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// cache.insert(1, String::from("a"));
   /// ```
   pub fn insert(&mut self, key: K, value: V) -> Option<V> {
-    let entry = self.h.insert(
-                        key,
-                        Entry {
-                          value,
-                          insert_time: Instant::now()
-                        }
-                      )?;
+    let entry = self.hashmap.insert(
+                              key,
+                              Entry {
+                                value,
+                                insert_time: Instant::now()
+                            })?;
     Some(entry.value)
   }
 
@@ -142,7 +139,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// cache.delete(&1);
   /// ```
   pub fn delete(&mut self, key: &K) -> Option<V> {
-    let entry = self.h.remove(key)?;
+    let entry = self.hashmap.remove(key)?;
     Some(entry.value)
   }
 }
