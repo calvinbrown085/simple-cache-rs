@@ -6,9 +6,7 @@ use std::time::Instant;
 #[derive(Debug, Clone)]
 struct ValueWithTimeout<V> {
     value: V,
-    insert_time: Instant,
-    timeout: Option<Duration>,
-
+    insert_time: Instant
 }
 
 #[derive(Debug, Clone)]
@@ -63,7 +61,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     /// ```
     pub fn get(&self, key: &K) -> Option<V> {
         self.h.get(key).and_then(|v| {
-            if let Some(timeout) = v.timeout {
+            if let Some(timeout) = self.timeout {
                 if v.insert_time.elapsed() >= timeout {
                     self.clone().delete(key);
                     return None
@@ -113,8 +111,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
                 item.0,
                 ValueWithTimeout {
                     value: item.1,
-                    insert_time: Instant::now(),
-                    timeout: self.timeout,
+                    insert_time: Instant::now()
                 },
             );
         }
@@ -133,8 +130,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
             key,
             ValueWithTimeout {
                 value,
-                insert_time: Instant::now(),
-                timeout: self.timeout
+                insert_time: Instant::now()
             },
         ).map(|vwt| vwt.value.clone())
     }
