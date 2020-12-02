@@ -126,13 +126,14 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     /// cache.insert(1, String::from("a"));
     /// ```
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
-        self.h.insert(
+        let entry = self.h.insert(
             key,
             ValueWithTimeout {
                 value,
                 insert_time: Instant::now()
-            },
-        ).map(|vwt| vwt.value.clone())
+            }
+        )?;
+        Some(entry.value.clone())
     }
 
     /// Remove an entry from the cache
@@ -145,7 +146,8 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     /// cache.delete(&1);
     /// ```
     pub fn delete(&mut self, key: &K) -> Option<V> {
-        self.h.remove(key).map(|vwt| vwt.value)
+        let entry = self.h.remove(key)?; // Returns None, if "fail"
+        Some(entry.value.clone())
     }
 }
 
