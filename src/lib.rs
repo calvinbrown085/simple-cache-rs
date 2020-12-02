@@ -31,7 +31,6 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// 
     /// let timeout = Duration::new(100, 0);
     /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(Some(timeout));
-    ///
     /// ```
     pub fn new(timeout: Option<Duration>) -> SimpleCache<K, V> {
         SimpleCache {
@@ -84,7 +83,6 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     pub fn values(&self) -> Vec<V> {
         self.h.values().map(|vwt| vwt.value.clone()).collect::<Vec<V>>()
     }
-
 
     /// Insert a batch of items into the cache
     /// ```
@@ -144,9 +142,8 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
 
 #[cfg(test)]
 mod tests {
-    use crate::SimpleCache;
-    use std::time::Duration;
-    use std::thread;
+    use super::SimpleCache;
+    use std::{thread, time::Duration};
 
     #[test]
     fn insert_and_get_item() {
