@@ -1,7 +1,7 @@
 use std::collections::HashMap;
+use std::time::{Duration, Instant};
 use std::hash::Hash;
-use std::time::Duration;
-use std::time::Instant;
+use std::fmt::Debug;
 
 #[derive(Debug, Clone)]
 struct Entry<V> {
@@ -15,7 +15,7 @@ pub struct SimpleCache<K, V> {
   timeout: Option<Duration>
 }
 
-impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
+impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
 
     /// Returns a new instance of SimpleCache
     ///
