@@ -39,30 +39,26 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
         }
     }
 
-
     /// Get a value optionally from the cache, if the value is expired this method will return None
     /// and delete the value lazily from the cache.
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+  /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.get(&1);
     /// ```
     pub fn get(&mut self, key: &K) -> Option<V> {
-        self.h.get(key).and_then(|v| {
-            match v.timeout {
-                Some(timeout) => {
-                    if v.insert_time.elapsed() >= timeout {
-                        self.clone().delete(key);
-                        None
-                    } else {
-                        Some(v.value.clone())
+    let entry = self.h.get(key)?;
+
+    if let Some(timeout) = self.timeout {
+      if entry.insert_time.elapsed() >= timeout {
+        self.delete(key);
+        return None
                     }
-                },
-                None => Some(v.value.clone())
             }
-        })
+
+    Some(entry.value.clone())
     }
 
     /// Get all keys that are in the cache
