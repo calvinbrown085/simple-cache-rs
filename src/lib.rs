@@ -90,20 +90,21 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+  /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// let items = vec!((1, String::from("a")), (2, String::from("b")));
     /// cache.insert_batch(items);
     /// ```
     pub fn insert_batch(&mut self, items: Vec<(K, V)>) {
+    let i_now = Instant::now();
+
         for item in items {
             self.h.insert(
                 item.0,
-                ValueWithTimeout {
+              Entry {
                     value: item.1,
-                    insert_time: Instant::now(),
-                    timeout: self.timeout,
-                },
+                insert_time: i_now
+              }
             );
         }
     }
@@ -112,19 +113,19 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
     /// ```
     /// use simple_cache_rs::SimpleCache;
     ///
-    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new();
+  /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
     ///
     /// cache.insert(1, String::from("a"));
     /// ```
     pub fn insert(&mut self, key: K, value: V) -> Option<V> {
-        self.h.insert(
+    let entry = self.h.insert(
             key,
-            ValueWithTimeout {
+                        Entry {
                 value,
-                insert_time: Instant::now(),
-                timeout: self.timeout
-            },
-        ).map(|vwt| vwt.value.clone())
+                          insert_time: Instant::now()
+                        }
+                      )?;
+    Some(entry.value)
     }
 
     /// Remove an entry from the cache
