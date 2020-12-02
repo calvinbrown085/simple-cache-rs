@@ -1,5 +1,5 @@
 # A simple in-mem cache for Rust
-[![Docs of original repo](https://docs.rs/simple-cache-rs/badge.svg)](https://docs.rs/simple-cache-rs/)
+[![Docs](https://docs.rs/simple-cache-rs/badge.svg)](https://docs.rs/simple-cache-rs/)
 [![Apache-2 licensed](https://img.shields.io/crates/l/simple-cache-rs.svg)](https://github.com/calvinbrown085/simple-cache-rs/blob/main/LICENSE)
 [![CI](https://img.shields.io/github/workflow/status/calvinbrown085/simple-cache-rs/rust-unit-test)](https://github.com/calvinbrown085/simple-cache-rs/actions?query=workflow%3ARust)
 
