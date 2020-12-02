@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::hash::Hash;
-use std::time::Duration;
-use std::time::Instant;
+use std::time::{Duration, Instant};
+use std::fmt::Debug;
 
 #[derive(Debug, Clone)]
 struct ValueWithTimeout<V> {
@@ -12,10 +12,10 @@ struct ValueWithTimeout<V> {
 #[derive(Debug, Clone)]
 pub struct SimpleCache<K, V> {
     h: Box<HashMap<K, ValueWithTimeout<V>>>,
-    timeout: Option<Duration>,
+    timeout: Option<Duration>
 }
 
-impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
+impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
 
     /// Returns a new instance of SimpleCache
     ///
@@ -28,7 +28,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     pub fn new() -> SimpleCache<K, V> {
         SimpleCache {
             h: Box::new(HashMap::new()),
-            timeout: None,
+            timeout: None
         }
     }
 
@@ -45,7 +45,7 @@ impl<K: Eq + Hash + Clone, V: Clone> SimpleCache<K, V> {
     pub fn with_timeout(timeout: Duration) -> SimpleCache<K, V> {
         SimpleCache {
             h: Box::new(HashMap::new()),
-            timeout: Some(timeout),
+            timeout: Some(timeout)
         }
     }
 
