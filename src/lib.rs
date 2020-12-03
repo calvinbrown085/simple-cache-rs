@@ -11,7 +11,7 @@ struct Entry<V> {
 
 #[derive(Debug, Clone)]
 pub struct SimpleCache<K, V> {
-  hashmap: Box<HashMap<K, Entry<V>>>,
+  hashmap: HashMap<K, Entry<V>>,
   timeout: Option<Duration>
 }
 
@@ -34,7 +34,7 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
   /// ```
   pub fn new(timeout: Option<Duration>) -> SimpleCache<K, V> {
     SimpleCache {
-      hashmap: Box::new(HashMap::new()),
+      hashmap: HashMap::new(),
       timeout: timeout
     }
   }
