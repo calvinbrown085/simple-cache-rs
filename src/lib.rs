@@ -57,6 +57,8 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
             }
         }
 
+
+
         Some(entry.value.clone())
     }
 
@@ -85,6 +87,20 @@ impl<K: Eq + Hash + Clone + Debug, V: Clone + Debug> SimpleCache<K, V> {
             .values()
             .map(|v| v.value.clone())
             .collect::<Vec<V>>()
+    }
+
+    /// Get all tuples of keys and values that are in the cache
+    /// ```
+    /// use simple_cache_rs::SimpleCache;
+    ///
+    /// let mut cache: SimpleCache<i32, String> = SimpleCache::new(None);
+    ///
+    /// cache.tuples();
+    /// ```
+    pub fn tuples(&self) -> Vec<(K, V)> {
+      self.hashmap.iter()
+          .map(|(k, v)| (k.clone(), v.value.clone()))
+          .collect::<Vec<(K, V)>>()
     }
 
     /// Insert a batch of items into the cache
@@ -212,5 +228,14 @@ mod tests {
 
         let v = scache.get(&1);
         assert_eq!(None, v)
+    }
+
+    #[test]
+    fn get_tuples_test() {
+      let mut scache: SimpleCache<i32, String> = SimpleCache::new(None);
+      scache.insert(1, String::from("hello"));
+
+      let values: Vec<(i32, String)> = scache.tuples();
+      assert_eq!(values, vec!((1, String::from("hello"))))
     }
 }
